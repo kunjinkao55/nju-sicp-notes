@@ -1,0 +1,55 @@
+#链表
+class Link:
+    empty=()#标识'空'
+    def __init__(self,first,rest=empty):
+        assert rest is Link.empty or isinstance(rest,Link)
+        self.first=first
+        self.rest=rest
+        '''rest 的形式是Link(1,Link(2,Link(3,...)))'''
+        '''套娃的link结构'''
+        '''具体形式是窜入参数的时候明确的'''
+
+def sum(a):#非嵌套
+    if a==():
+        return 0
+    return sum(a.rest)+a.first
+
+        
+a=Link(1,Link(2,Link(3)))
+b=Link(6,Link(4,Link(8)))
+c=Link(a,Link(a,b))
+
+print(sum(a))
+
+######################################################################
+def real_print(c):
+    def print_link(a):#打印链表
+        temp1=''
+        temp=a
+        if type(a.first)==Link:
+            temp1+=print_link(a.first)+" "
+            temp1+=print_link(temp.rest)
+        
+    
+        while(temp and type(temp.first)==int):
+                temp1+=f"{temp.first}"+' '
+                temp=temp.rest
+        return ('< '+temp1+'>')
+    print(print_link(c))
+
+real_print(c)
+#####################################################################    
+def map_link(l,func):#无法处理的链表递归
+     if l == Link.empty:
+          return Link.empty
+     return Link(func(l.first),map_link(l.rest,func))
+
+t=map_link(a,lambda x:x**2**2)
+
+real_print(t)
+
+#插入 我想插在谁的前面：我的rest指向谁
+#我想插在谁后面：谁的rest指向我
+def mamap_link(l,func):
+     
+    pass

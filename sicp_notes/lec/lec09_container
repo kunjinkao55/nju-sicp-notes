@@ -1,0 +1,37 @@
+'''list'''
+a=[1,2,3,4,5,6]
+print(a)
+length=len(a)
+print(length)
+b=[4,5,6]
+print(a+2*b)
+a.append(4)#末尾延申一个元素，不限种类
+print(a)
+print(a[1:3])#切片，区间左闭右开，不改变a本身，相当于复制并创建
+一个新list
+'''[2,3]'''
+
+from operator import getitem,add
+getitem(a,2)
+'''equal to a[2]'''
+print(add(a,b))
+像字典中扩充元素 update
+class Frame:
+    """An environment frame binds Scheme symbols to Scheme values."""
+
+    def __init__(self, parent):
+        """An empty frame with parent frame PARENT (which may be None)."""
+        self.bindings = {}
+        self.parent = parent
+
+    def __repr__(self):
+        if self.parent is None:
+            return '<Global Frame>'
+        s = sorted(['{0}: {1}'.format(k, v) for k, v in self.bindings.items()])
+        return '<{{{0}}} -> {1}>'.format(', '.join(s), repr(self.parent))
+
+    def define(self, symbol, value):
+        """Define Scheme SYMBOL to have VALUE."""
+        # BEGIN PROBLEM 1
+        self.bindings.update({symbol: value})
+        # END PROBLEM 1

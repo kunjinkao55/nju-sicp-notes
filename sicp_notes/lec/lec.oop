@@ -1,0 +1,112 @@
+#__init__#类的默认构造函数
+class Account:
+    interest = 0.02 
+    def __init__(self, owner, interest , balance=0): #interest 存在但是没赋值
+        self.owner = owner
+        self.balance = balance
+        self.interest 
+    def deposit(self,money):
+        self.balance+=self.balance+money
+        return self.balance
+    def withdrow(self,account):
+        if(self.balance<account):
+            print("")
+    #self是实例变量，即instance attribute，每个对象独有的属性
+     
+#实例化对象
+a = Account('Alice')
+a.deposit(100)#假设已经实现了deposit方法
+#a binding 到 Account类的实例对象，然后调用deposit方法，传入参数100
+'''
+把self绑定到某个实例是解释器默认进行的 不需要手动操作
+<expression>.<name> 
+expression形式自由 最后算出来是class或instance就行
+name必须是最简化的成员形式(也就是定义式)
+'''
+
+'''
+>>>obj.name
+looking for <name> 的顺序
+如果存在instance具有某个attribute  就返回它的值
+否则(不存在instance attribute或者存在但是没赋值)在class中查找<name>,并返回类属性值(找不到就报错) ?存在但是没赋值
+<name>不是函数就返回值,是函数就返回methods(methods 自动把objects和function绑定然后返回)
+”越具体越优先”
+'''
+#执行class statement时会执行suite(class的实际内容)
+class Jules:
+    def __init__(self,member):
+        self.member=member
+        self.home#instance attribute
+        self.saojiao#把这段注释掉验证
+    home=0#class attribute
+    def saojiao(self):
+        print("plj,!!!")
+        self.home-=1
+
+k=Jules('wda')
+k.saojiao()#plj
+k.saojiao#binding method
+Jules.saojiao(k)#plj 这个合法，是手动绑定
+#对象->方法  和  类->对象->方法(手动)是等效的
+
+#静态方法@ststicmethod 不依赖于类的任何实例的状态，即不会接受类或者实例作为参数
+    
+class test:
+    def __init__(self,value):
+        self.value=value
+    te=1
+    def te(self):
+        pass
+t1 = test(10)
+t2=test(20)
+t1.foooo=5#在class中没有，所以执行这一句时会在instance中添加一个新的attribute
+t2.te
+print(t1.te)
+print(t1.te())
+print(t2.te)
+print(test.te)
+print(t1.foooo)
+print(t2.foooo)
+#通过instance修改attribute，只会影响当前对象，不会影响其他对象
+#通过class修改attribute，会影响所有对象，因为所有对象都共享同一个class属性，除了之前被通过instance修改过的属性
+#子类的实例通过父类访问，直接访问父类属性，而不是子类属性
+#继承 inheritence
+#先在子类中优先查找，找不到就回到父类中查找
+#方法重写 
+# 如果子类方法使用了super（）调用父类方法：如果参数数量不同会报错，如果重写函数新增具有缺省值的参数，还会报错吗？回答：不会报错，因为新增的参数是可选的，不会影响到之前的代码
+#没有用到super的话就无所谓
+class CheckingAccount(Account):
+    fee=1
+    def withdrow(self, account):
+        return Account.withdrow(self, account-self.fee)#"self.fee"的self不能省略，表示引用的来源实例(先去instance找），因为它不能自发去找父类，必须通过引用
+#如果有引用(self.)，就会遵循look up 规则一步步招上去：当前instance->当前class->父类->祖先类->...
+#值得注意的是，只有在函数调用时会新建一层frame，遵循前面讲过的frame look up role，所以子class和父class在同一个frame中，也就是说它们都在global frame中
+
+#神奇的关键字 :super() 调用父类的方法，可以省略参数，会自动找到父类的__init__方法，并传入self和其他参数
+#使用形式 : super(CheckingAccount, self).__init__(owner, balance)
+
+#composition:创建当前类的一个attribute，指向（<Aclass.attribute>=<Bclass.instance>）另一个类的实例，这样就可以通过这个attribute来访问另一个类的属性和方法
+#同层次多继承同名attribute，会优先使用最左边的父类
+#多继承的顺序是从左到右，如果有同名属性，则优先使用最左边的父类
+
+#继承原则：子类的方法可以与父类方法互相完全替代（在格式上）（接口一致？）
+#子类的构造不应该与父类冲突
+
+#__new__():https://www.pythontutorial.net/python-oop/python-__new__/
+#如果一个基类有一个__init__()方法，
+#派生类的__init__()方法（如果有）必须显式地调用它，
+#以确保实例的基类部分得到正确的初始化；
+# 例如：super().__init__([参数...])。
+super() -> same as super(__class__, )
+super(type) -> unbound super object
+super(type, obj) -> bound super object; requires isinstance(obj, type)
+super(type, type2) -> bound super object; requires issubclass(type2, type)
+Typical use to call a cooperative superclass method:
+class C(B):
+    def meth(self, arg):
+        super().meth(arg)#calls B.meth(self, arg), where self is an instance of C,self由super()体现，因为super()返回的是一个bound super object，参数表里就不用再写self了
+This works for class methods too:
+class C(B):
+    @classmethod
+    def cmeth(cls, arg):
+        super().cmeth(arg)

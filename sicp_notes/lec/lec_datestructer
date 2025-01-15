@@ -1,0 +1,28 @@
+class Dog:
+    def __init__(self,name,owner):
+        self.name=name
+        self.owner=owner
+        self.__repr__=lambda: "I love eating shit!woof!wow!ahahonk!"
+    def __repr__(self):
+        return f"Dog({self.name}, {self.owner})"
+    def __add__(self,other):
+        return f"{self.name} and {other.name} are friends!"
+    
+# dog=Dog("Rufus","John")
+# print(dog)
+# print(repr(dog))
+# print(dog.__str__())
+
+class Cat(Dog):
+    def __init__(self,name,owner):
+        super().__init__(name,owner)
+    def __add__(self,other):
+        return "go off!"
+    
+cat=Cat("Fluffy","Jane")
+dog=Dog("Rufus","John")
+
+print(cat+dog)#add method of Dog class is called
+print(dog+cat)#radd method of Cat class is called
+print(cat+cat)#add method of Cat class is called
+print(dog+dog)#add method of Dog class is called

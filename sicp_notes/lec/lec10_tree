@@ -1,0 +1,26 @@
+list tree见code10
+dictionary tree：
+#Constructor
+def tree(label,branches=[]):
+"""Creates a tree with the given label value at itsroot node and list of branches ."""
+return { ' label' : label, ' branches ' : branches}
+#Selectors
+def label(t) :
+"""Returns the value in the root node of tree" ""return t[ ' label' ]
+def branches(t):
+"""Returns the list of branches of the given tree" " "return t[ 'branches ']
+# Convenience Functionsdef is_leaf(t) :
+"""Returns True if tree's list of branches is empty,and False otherwise. " ""
+return not branches(t)
+def print_tree(t,indent=0):
+print(''*indent + str( label(t)))for b in branches (t):
+print_tree(b, indent + 1)
+# An Example
+def count_leaves(t):
+"""Count the leaves of a tree . " ""if is_leaf(t):
+return 1else:
+branch_counts =[count_leaves(b) for b in branches(t)]return sum(branch_counts)
+sproul = tree( ' roots ' , [tree( 'branch1 ',[tree( ' leaf'),tree( ' nut')]
+print_tree( sproul)
+print(' ----------')
+print( count_leaves(sproul))

@@ -1,0 +1,125 @@
+'''
+main idea:
+every element in Scheme is an expression
+ 1.Atomic expressions
+    ● Self-evaluating: numbers, booleans
+        3, 5.5, -10, #t, #f
+    ● Symbols: names bound to values
+        +, modulo, list, x, foo, hello-world 
+*2.Combinations:
+    (<operator> <operand1> <operand2> …) 类似波兰式，操作数小于等于两个
+'''
+语法:
+<operator> : define, if, lambda, etc.
+1.(define <name> <expr>) 类似python的规则
+Step 1. Evaluate the given expression.
+#算表达式
+Step 2. Bind the resulting value to the given name in the current frame.
+绑到name上
+Step 3. Return the name as a symbol.
+#返回name
+2.(if <predicate> <if-true> <if-false>)
+   <if-false>是可省略的
+   *important: #f is the only Falsy value in Scheme
+   其他的一切都按照#t对待
+
+scm> (if 1 2 3)
+2
+scm> (if (not 1) 2 3)
+3
+
+3.定义函数
+  (define (<name> <param1> <param2> …) <body>)
+  How to evaluate:
+Step 1. Create a lambda procedure with the given parameters and body.
+#创建一个lambda函数
+Step 2. Bind it to the given name in the current frame.
+#把λ绑定到给定的name上 
+Step 3. Return the function name as a symbol.
+返回函数名
+sxample:
+(define (lifang x) (* x (* x x)))
+
+4 lambda expression
+    (lambda (<param1> <param2> …) (<body>))
+
+scm> (lambda (x) (* x x))
+(lambda (x) (* x x))
+scm> ((lambda (x) (* x x)) 5) #call expressions
+25
+scm> (define square (lambda (x) (* x x)))
+square
+scm> (square 4)
+16
+
+Two equivalent expressions:
+(define (plus4 x) (+ x 4))等价于
+(define plus4 (lambda (x) (+ x 4)))#因为这个相当于把(lambda)那一串到绑plus4这个name上
+
+定义阶乘
+(define (fac n) (if(<= n 1) 1 (* n (fac(- n 1)))))
+
+绝对值
+(define (abs n) (if(>= n 0) n (- 0 n)))
+            函数体开始时要有括号   
+均值
+(define (aver a b) (/ (+ a b) 2))
+
+scheme的数据结构一种
+pairs 关键字cons
+>(define x (cons 1 (cons 2 nil)))
+x
+>x
+(1,2)
+>(car x)//pair的第一个元素
+1
+>(cdr x)//pair的第二个元素
+2
+(cons 1 (cons 2 (cons 3 (cons 4 nil))))
+(1 2 3 4)
+>(list 2 3 4 5)//list实际上是用cons实现的
+(2 3 4 5)
+>(cdr (list 2 3 4 5))
+(3 4 5)
+
+引用 quote ' 
+使用这两个关键字会直接输入变量的字面值
+> (define a 1)
+a
+> a
+1
+> (define b 2)
+b
+> (define ab (cons a b))
+ab
+> ab
+(1 . 2)
+> 'ab
+ab
+> ab
+(1 . 2)
+> (quote ab)
+ab
+
+Tail Recursion 尾递归优化
+名词解释：
+tail context :the expression is the last step in the function 
+函数体最后一个语句
+tail call: function calls in tail context
+最后一个语句是函数调用
+
+一个例子?尾递归阶乘
+scm> 
+(define (tailfac n) 
+  (define(help n ans)
+  (if(<= n 1) 
+   ans
+   ( help (- n 1) (* n ans))))
+ (help n 1))
+
+非尾递归递归会抛出新栈
+
+模板:通过参数的形式传递中间值
+
+能优化避免压栈的原因:
+旧栈没用后直接被回收

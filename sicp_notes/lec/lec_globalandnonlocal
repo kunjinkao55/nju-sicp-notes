@@ -1,0 +1,13 @@
+a=1
+def test ():
+    def inn():
+        global a
+        a=21
+        return a
+    return inn()
+print(test())
+print(a:=10)
+#nonlocal 外层
+#global 全局
+#常用于在内层 修 改 外层变量
+#否则在内层只能读取外层变量，不能修改

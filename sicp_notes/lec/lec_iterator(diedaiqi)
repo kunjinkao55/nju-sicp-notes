@@ -1,0 +1,70 @@
+s=[1,2,3,4]
+'''
+it = iter(s)
+>>> next(it)
+1
+it1 = iter(s)# create a new iterator
+>>> next(it1)
+1#相互独立
+>>> next(it)
+2
+>>> next(it)
+3
+>>> next(it)
+4
+>>> next(it)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+
+'''
+#在字典的迭代过程中不能修改字典，否则会导致迭代过程中字典的大小发生变化，导致迭代出错。
+#list迭代过程中可以修改list，因为list是可变序列，可以直接修改元素。
+def prand2(z):
+    print(z)
+    return z*2
+it=map(prand2,s)
+def list1():
+    i=100
+    while i>0:
+        yield i-1
+t=list1()
+def fib():
+    yield 0
+    yield 1
+    fib1=fib()
+    fib2=fib()
+    next(fib1)
+    while True:
+        yield next(fib1) + next(fib2)
+a=fib()
+while(True):
+    next(a)
+
+list2=[1,2,3,4]
+it=iter(list2)
+while(True):
+    try:
+        print(next(it))
+    except StopIteration:
+        break 
+for e in zip([10, 9, 8], range(3)):
+  #e is 迭代器{(10，0)，（9，1），（8，2）}这里用大括号是因为不知道用什么符号，暂时拿来用换一下
+  print(tuple(map(lambda x: x + 2, e)))  
+      #应该是每对里的每个元素取出来分别加2  
+  #(line 1)(12,2)
+ #(line 2)(11,3)
+ # (line 3) (10,4)
+
+
+def a():
+    yield 1
+    return 2
+def b():
+    return 2
+    yield 1
+def c():
+    yield 1
+
+
+
